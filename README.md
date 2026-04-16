@@ -31,3 +31,69 @@ Any machine can be used, the only limitation is using a single GPU for measureme
 If there are any questions, you can file an issue in this repository.
 
 Good luck and have fun!
+
+## Vivek's Analysis
+
+### Nvidia Speed of Light Profile Stats
+
+#### GPU Speed Of Light Throughput
+
+| Metric Name             | Unit  | mult-32b-limbs-one-asm-block | mult-64b-limbs   | mult-32b-limbs |
+| :---------------------- | :---- | :--------------------------- | :--------------- | :------------- |
+| Duration                | ms    | 595.80                       | 843.05           | 549.63         |
+| Elapsed Cycles          | cycle | 902,408,579                  | 1,276,753,856    | 832,405,586    |
+| SM Active Cycles        | cycle | 906,461,022.74               | 1,273,128,099.35 | 830,105,680.80 |
+| Compute (SM) Throughput | %     | 71.31                        | 84.14            | 78.27          |
+| Memory Throughput       | %     | 26.63                        | 2.50             | 6.68           |
+| DRAM Throughput         | %     | 1.50                         | 1.09             | 1.61           |
+| L1/TEX Cache Throughput | %     | 0.60                         | 1.73             | 6.68           |
+| L2 Cache Throughput     | %     | 26.55                        | 2.50             | 3.74           |
+| DRAM Frequency          | Ghz   | 13.99                        | 13.99            | 13.99          |
+| SM Frequency            | Ghz   | 1.51                         | 1.51             | 1.51           |
+
+---
+
+#### Compute Workload Analysis
+
+| Metric Name          | Unit       | mult-32b-limbs-one-asm-block | mult-64b-limbs | mult-32b-limbs |
+| :------------------- | :--------- | :--------------------------- | :------------- | :------------- |
+| SM Busy              | %          | 71.31                        | 84.14          | 78.27          |
+| Issue Slots Busy     | %          | 30.04                        | 40.87          | 33.62          |
+| Executed Ipc Active  | inst/cycle | 1.20                         | 1.63           | 1.34           |
+| Executed Ipc Elapsed | inst/cycle | 1.20                         | 1.63           | 1.34           |
+| Issued Ipc Active    | inst/cycle | 1.20                         | 1.63           | 1.34           |
+
+---
+
+#### Memory Workload Analysis
+
+| Metric Name                  | Unit    | mult-32b-limbs-one-asm-block | mult-64b-limbs | mult-32b-limbs |
+| :--------------------------- | :------ | :--------------------------- | :------------- | :------------- |
+| Memory Throughput            | Gbyte/s | 7.79                         | 5.65           | 8.41           |
+| Mem Busy                     | %       | 26.55                        | 1.43           | 6.68           |
+| Max Bandwidth                | %       | 26.63                        | 2.50           | 3.74           |
+| L1/TEX Hit Rate              | %       | 62.47                        | 93.02          | 97.97          |
+| L2 Hit Rate                  | %       | 101.81                       | 78.93          | 79.24          |
+| Mem Pipes Busy               | %       | 0.05                         | 0.16           | 0.82           |
+| L2 Persisting Size           | Mbyte   | 7.08                         | 7.08           | 7.08           |
+| Local Mem Spilling Requests  | count   | 0                            | 0              | 0              |
+| Local Mem Spilling Overhead  | %       | 0                            | 0              | 0              |
+| L2 Sector Promotion Misses   | %       | 0                            | 0              | 0              |
+| Shared Mem Spilling Requests | count   | 0                            | 0              | 0              |
+| Shared Mem Spilling Overhead | %       | 0                            | 0              | 0              |
+| L2 Compression Success Rate  | %       | 0                            | 0              | 0              |
+| L2 Compression Ratio         | ratio   | 0                            | 0              | 0              |
+| L2 Compression Input Sectors | sector  | 0                            | 0              | 0              |
+
+---
+
+#### Scheduler Statistics
+
+| Metric Name                | Unit  | mult-32b-limbs-one-asm-block | mult-64b-limbs | mult-32b-limbs |
+| :------------------------- | :---- | :--------------------------- | :------------- | :------------- |
+| One or More Eligible       | %     | 29.94                        | 40.87          | 33.62          |
+| No Eligible                | %     | 70.06                        | 59.13          | 66.38          |
+| Active Warps Per Scheduler | warp  | 9.66                         | 8.99           | 9.92           |
+| Eligible Warps Per Sched.  | warp  | 1.06                         | 2.89           | 2.44           |
+| Issued Warp Per Scheduler  | count | 0.30                         | 0.41           | 0.34           |
+

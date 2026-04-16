@@ -8,13 +8,16 @@ fn main() {
     let mut arch = String::from("-arch=");
     arch.push_str(&arch_type);
 
+    let kernel = env::var("CUDA_KERNEL").unwrap_or_else(|_| String::from("mult"));
+    let cu_path = format!("./cuda/{}.cu", kernel);
+    println!("cargo:rerun-if-env-changed=CUDA_KERNEL");
+    println!("cargo:rerun-if-changed={}", cu_path);
+
     let mut nvcc = cc::Build::new();
 
     nvcc.cuda(true);
     nvcc.debug(false);
     nvcc.flag(&arch);
-    nvcc.files([
-        "./cuda/mult.cu",
-    ]);
+    nvcc.files([cu_path.as_str()]);
     nvcc.compile("ingo_challenge");
 }
